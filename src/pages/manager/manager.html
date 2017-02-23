@@ -42,14 +42,8 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'projects'">
-      <ion-item>
-        <h2>Project #1</h2>
-      </ion-item>
-      <ion-item>
-        <h2>Project #2</h2>
-      </ion-item>
-      <ion-item>
-        <h2>Project #3</h2>
+      <ion-item *ngFor="let project of projectList" (click)="selectListItem(project)">
+        <h2>{{project.name}}</h2>
       </ion-item>
     </ion-list>
 
@@ -64,6 +58,17 @@
         <h2>MileStone #3</h2>
       </ion-item>
     </ion-list>
+
   </div>
+
+
+  <ion-fab bottom right>
+    <button ion-fab mini><ion-icon name="add"></ion-icon></button>
+    <ion-fab-list side="top">
+      <button ion-fab><ion-icon name="albums"></ion-icon></button>
+      <button ion-fab><ion-icon name="ios-person-outline"></ion-icon></button>
+      <button ion-fab><ion-icon name="flag"></ion-icon></button>
+    </ion-fab-list>
+  </ion-fab>
 
 </ion-content>

@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
+import { ProjectDetailPage } from '../project-detail/project-detail';
+
+import { ProjectProvider } from '../../providers/project.provider';
+
 /*
   Generated class for the Manager page.
 
@@ -15,8 +19,14 @@ export class ManagerPage {
 
   manageType: string = "customers";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  public projectList = new Array();
 
+  constructor(public navCtrl: NavController, public navParams: NavParams, public projectProvider: ProjectProvider) {
+    this.projectList = this.projectProvider.getAllProjects();
+  }
+
+  selectListItem(item) {
+    this.navCtrl.push(ProjectDetailPage, { id: item.id });
   }
 
   ionViewDidLoad() {

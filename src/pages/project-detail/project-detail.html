@@ -1,0 +1,47 @@
+<!--
+  Generated template for the ProjectDetail page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{pageTitle}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+
+  <div class="item-header">
+    <h1 *ngIf="!editMode">{{project.name}}</h1>
+    <input *ngIf="editMode" [(ngModel)]="project.name" placeholder="Project Title" />
+  </div>
+
+  <div class="item-description">
+    <h4 *ngIf="!editMode">{{project.description}}</h4>
+    <textarea *ngIf="editMode" [(ngModel)]="project.description" placeholder="Project Description"></textarea>
+  </div>
+
+
+
+  <div class="item-startdate">
+
+    <h1 *ngIf="!editMode">{{project.startdate}}</h1>
+    <ion-item *ngIf="editMode">
+      <ion-label>Start Time</ion-label>
+      <ion-datetime displayFormat="MM.DD.YYYY" pickerFormat="MM DD YYYY" [(ngModel)]="project.startdate"></ion-datetime>
+    </ion-item>
+
+  </div>
+
+  <button ion-button (click)="saveItem()">Save Project</button>
+
+  <ion-fab bottom right>
+    <button ion-fab (click)="editItem()"><ion-icon name="edit"></ion-icon></button>
+  </ion-fab>
+
+</ion-content>
