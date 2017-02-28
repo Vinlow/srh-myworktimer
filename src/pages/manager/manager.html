@@ -7,6 +7,9 @@
 <ion-header>
 
   <ion-navbar primary>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>Manager</ion-title>
   </ion-navbar>
 
@@ -30,32 +33,20 @@
 
   <div [ngSwitch]="manageType">
     <ion-list *ngSwitchCase="'customers'">
-      <ion-item>
-        <h2>Customer #1</h2>
-      </ion-item>
-      <ion-item>
-        <h2>Customer #2</h2>
-      </ion-item>
-      <ion-item>
-        <h2>Customer #3</h2>
+      <ion-item *ngFor="let customer of customerList" (click)="selectListItem('customer', customer)">
+        <h2>{{customer.name}}</h2>
       </ion-item>
     </ion-list>
 
     <ion-list *ngSwitchCase="'projects'">
-      <ion-item *ngFor="let project of projectList" (click)="selectListItem(project)">
+      <ion-item *ngFor="let project of projectList" (click)="selectListItem('project', project)">
         <h2>{{project.name}}</h2>
       </ion-item>
     </ion-list>
 
     <ion-list *ngSwitchCase="'milestones'">
-      <ion-item>
-        <h2>MileStone #1</h2>
-      </ion-item>
-      <ion-item>
-        <h2>MileStone #2</h2>
-      </ion-item>
-      <ion-item>
-        <h2>MileStone #3</h2>
+      <ion-item *ngFor="let milestone of milestoneList" (click)="selectListItem('milestone', milestone)">
+        <h2>{{milestone.name}}</h2>
       </ion-item>
     </ion-list>
 

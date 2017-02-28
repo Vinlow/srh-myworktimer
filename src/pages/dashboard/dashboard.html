@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -8,5 +8,46 @@
 </ion-header>
 
 <ion-content padding>
-  <h3>Welcome to MyWorkTimer</h3>
+  <h3>Customer</h3>
+  <ion-list>
+    <ion-item>
+      <ion-label>Select a customer</ion-label>
+      <ion-select (ionChange)="changeCustomer()" [(ngModel)]="selectedCustomer">
+        <ion-option *ngFor="let customer of customerProvider.getAllCustomers()" value="{{customer.id}}">{{customer.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <h3>Projects</h3>
+  <ion-list>
+    <ion-item>
+      <ion-label>Select a project</ion-label>
+      <ion-select (ionChange)="changeProject()" [(ngModel)]="selectedProject">
+        <ion-option *ngFor="let project of projectProvider.getAllProjects()" value="{{project.id}}">{{project.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <h3>Milestone</h3>
+  <ion-list>
+    <ion-item>
+      <ion-label>Select a milestone</ion-label>
+      <ion-select (ionChange)="changeMilestone()" [(ngModel)]="selectedMilestone">
+        <ion-option *ngFor="let milestone of milestoneProvider.getAllMilestones()" value="{{milestone.id}}">{{milestone.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <div class="timerBox">
+    <div class="timerSideInfo timerCurrentTime">{{getFormatedSessionDuration()}}</div>
+    <button ion-button class="timerButton" *ngIf="!timerState" (click)="toggleTimer()">
+      <ion-icon name="play"></ion-icon>
+    </button>
+    <button ion-button color="danger" class="timerButton" *ngIf="timerState"  (click)="toggleTimer()">
+      <ion-icon name="square"></ion-icon>
+    </button>
+    
+    <div class="timerSideInfo timerTimeLeft">{{getFormatedTimeLeft()}}</div>
+  </div>
+
 </ion-content>

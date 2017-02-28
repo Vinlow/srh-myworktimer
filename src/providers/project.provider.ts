@@ -17,10 +17,26 @@ export class ProjectProvider {
 
   public projects = new Array();
 
+
   constructor(public http: Http) {
 
-    this.generateExampleData(50);
+    this.loadProjectsFromDatabase();
 
+    this.generateExampleData(2);
+  }
+
+  // Save the database
+  saveProjectsToDatabase() {
+    localStorage.setItem("projects", JSON.stringify(this.projects));
+  }
+
+  // Load the database
+  loadProjectsFromDatabase() {
+    let storageJson = localStorage.getItem('projects');
+    if (!storageJson) {
+      storageJson = '[]';
+    }
+    this.projects = JSON.parse(storageJson);
   }
 
   // Return all the projects
@@ -44,12 +60,14 @@ export class ProjectProvider {
   // Add a new project
   addProject(project) {
     this.projects.push(project);
+    this.saveProjectsToDatabase();
     return this.getProjectById(project.id);
   }
 
   updateProject(projectUpdate) {
     let projectKey = this.getProjectKeyByID(projectUpdate.id);
     this.projects[projectKey] = projectUpdate;
+    this.saveProjectsToDatabase();
     return this.projects[projectKey];
   }
 
@@ -60,6 +78,7 @@ export class ProjectProvider {
     }
     let projectKeyInt = parseInt(projectKey);
     this.projects.splice(projectKeyInt, 1);
+    this.saveProjectsToDatabase();
   }
 
   generateExampleData(amount) {
