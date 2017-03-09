@@ -18,54 +18,16 @@ export class ProjectProvider {
 
 
   constructor(public connection: ConnectionProvider) {
-
     this.loadProjectsFromAPI();
-
-    this.testPost();
-
-    //this.generateExampleData(2);
   }
 
   // Load projects from api
   loadProjectsFromAPI() {
     var h = this;
-
     this.connection.getReqeuest('/api/v1/project', function (results) {
       console.log(results);
       h.projects = results;
     });
-  }
-
-  testPost() {
-    let testProject = new Object({
-      "name": "Im from the app",
-      "timelimit": 500
-    })
-
-    console.log("exec");
-
-    var h = this;
-    this.connection.postReqeuest('/api/v1/project', testProject, function (results) {
-      console.log("posted")
-      console.log(results);
-      if (results.errorCode == null) {
-        h.loadProjectsFromAPI();
-      }
-    });
-  }
-
-  // Save the database
-  saveProjectsToDatabase() {
-    localStorage.setItem("projects", JSON.stringify(this.projects));
-  }
-
-  // Load the database
-  loadProjectsFromDatabase() {
-    let storageJson = localStorage.getItem('projects');
-    if (!storageJson) {
-      storageJson = '[]';
-    }
-    this.projects = JSON.parse(storageJson);
   }
 
   // Return all the projects
@@ -88,45 +50,32 @@ export class ProjectProvider {
 
   // Add a new project
   addProject(project) {
-    this.projects.push(project);
-    this.saveProjectsToDatabase();
-    return this.getProjectById(project.id);
+    var h = this;
+    return this.connection.postReqeuest('/api/v1/project', project, function (results) {
+      if (results.errorCode == null) {
+        h.loadProjectsFromAPI();
+        return this.getProjectById(project.id);
+      }
+    });
   }
 
   updateProject(projectUpdate) {
-    let projectKey = this.getProjectKeyByID(projectUpdate.id);
-    this.projects[projectKey] = projectUpdate;
-    this.saveProjectsToDatabase();
-    return this.projects[projectKey];
+    var h = this;
+    return this.connection.putReqeuest('/api/v1/project', projectUpdate, function (results) {
+      if (results.errorCode == null) {
+        h.loadProjectsFromAPI();
+        return this.getProjectById(projectUpdate.id);
+      }
+    });
   }
 
   deleteProject(id) {
-    let projectKey = this.getProjectKeyByID(id);
-    if (!projectKey) {
-      return;
-    }
-    let projectKeyInt = parseInt(projectKey);
-    this.projects.splice(projectKeyInt, 1);
-    this.saveProjectsToDatabase();
+    var h = this;
+    return this.connection.deleteReqeuest('/api/v1/project/' + id, function (results) {
+      if (results.errorCode == null) {
+        h.loadProjectsFromAPI();
+      }
+    });
   }
-
-  generateExampleData(amount) {
-
-    for (let i = 0; i <= amount; i++) {
-      let newProject = new Object();
-      newProject['id'] = Math.random();
-      newProject['name'] = Math.round(Math.random() * 1000);
-      newProject['desc'] = Math.random();
-      newProject['customerId'] = Math.random();
-      newProject['duration'] = Math.random();
-
-      this.addProject(newProject);
-    }
-
-  }
-
-
-
-
 
 }
