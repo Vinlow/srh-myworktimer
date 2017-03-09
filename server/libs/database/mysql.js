@@ -16,12 +16,16 @@ exports.connectDatabase = () => {
 }
 
 exports.execQuery = function (sqlString, success, error) {
-    this.connection.query(sqlString, function (error, results, fields) {
-        if (error) {
-            error(error);
+    this.connection.query(sqlString, function (_error, _results, _fields) {
+        if (_error) {
+            error(_error);
             return;
         }
 
-        success(results);
+        success(_results);
     });
+}
+
+exports.escapeString = function (_string) {
+    return this.connection.escape(_string);
 }

@@ -1,25 +1,47 @@
 
 // Get a all projects
-exports.getAllProjects = (req, res) => {
-    // if active = 1
-    res.send("Return all items")
+exports.getAllProjects = (req, res, database) => {
+    let sqlString = "SELECT * FROM test_table WHERE active = 1";
+
+    database.execQuery(sqlString,
+        function (results) {
+            res.send(JSON.stringify(results));
+        }, function (error) {
+            console.log(error);
+            res.status(404).send({
+                "msg": "Could find a project",
+                "errorCode": "5.0.1"
+            });
+        })
 }
 
 // Get a project
-exports.getProject = (req, res) => {
+exports.getProject = (req, res, database) => {
     let itemID = req.params.id;
 
-    if (typeof itemID != 'number') {
+    if (Number.isNaN(itemID)) {
         // Return error
         res.status(400).send({
             "msg": "Could not get project",
-            "errorCode": "5.1"
+            "errorCode": "5.1.1"
         })
     }
     else {
-        // Return with filter
-        // if active = 1
-        res.send("Item ID: " + itemID)
+        console.log(itemID)
+        itemID = database.escapeString(itemID);
+        console.log(itemID)
+        let sqlString = `SELECT * FROM test_table WHERE active = 1 AND id = ${itemID}`;
+
+        database.execQuery(sqlString,
+            function (results) {
+                res.send(JSON.stringify(results));
+            }, function (error) {
+                console.log(error);
+                res.status(404).send({
+                    "msg": "Could find a project",
+                    "errorCode": "5.1.2"
+                });
+            })
     }
 }
 

@@ -1,5 +1,5 @@
 var projectsService = require('./projects.service/projects.service.route');
 
-exports.importAll = (_app) =>{
-    projectsService.import(_app);
+exports.importAll = (_app, _database) =>{
+    projectsService.import(_app, _database);
 } 
