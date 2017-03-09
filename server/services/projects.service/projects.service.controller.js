@@ -17,7 +17,7 @@ exports.getAllProjects = (req, res, database) => {
 
 // Get a project
 exports.getProject = (req, res, database) => {
-    let itemID = req.params.id;
+    let itemID = parseInt(req.params.id);
 
     if (Number.isNaN(itemID)) {
         // Return error
@@ -27,9 +27,7 @@ exports.getProject = (req, res, database) => {
         })
     }
     else {
-        console.log(itemID)
         itemID = database.escapeString(itemID);
-        console.log(itemID)
         let sqlString = `SELECT * FROM test_table WHERE active = 1 AND id = ${itemID}`;
 
         database.execQuery(sqlString,
@@ -46,10 +44,9 @@ exports.getProject = (req, res, database) => {
 }
 
 // Create a project
-exports.createProject = (req, res) => {
+exports.createProject = (req, res, database) => {
     let name = req.body.name;
     let timelimit = req.body.timelimit;
-    let duration = req.body.duration;
 
     if (name == null) {
         let error = new Object({
@@ -69,17 +66,19 @@ exports.createProject = (req, res) => {
         return
     }
 
-    if (duration == null || Number.isNaN(duration)) {
-        let error = new Object({
-            "msg": "duration not send",
-            "errorCode": "5.2.3"
+    let insertQuery = "INSERT INTO `test_table` (`name`, `timelimit`) VALUES (" + database.escapeString(name) + ", " + timelimit + ");";
+    database.execQuery(insertQuery,
+        function (results) {
+            res.status(200).send({
+                "msg": "Project created!"
+            });
+        }, function (error) {
+            console.log(error);
+            res.status(404).send({
+                "msg": "Error while creating project",
+                "errorCode": "5.2.4"
+            });
         })
-        res.status(400).send(JSON.stringify(error))
-        return
-    }
-
-
-    res.status(200).send({ "msg": "created" })
 }
 
 // Update a project
