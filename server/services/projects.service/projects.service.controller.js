@@ -45,6 +45,9 @@ exports.getProject = (req, res, database) => {
 
 // Create a project
 exports.createProject = (req, res, database) => {
+
+    console.log(req.body);
+
     let name = req.body.name;
     let timelimit = req.body.timelimit;
 

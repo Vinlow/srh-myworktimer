@@ -12,6 +12,7 @@ import { SettingsPage } from '../pages/settings/settings';
 
 
 // Providers
+import { ConnectionProvider } from '../providers/connection.provider';
 import { ProjectProvider } from '../providers/project.provider';
 import { CustomerProvider } from '../providers/customer.provider';
 import { MilestoneProvider } from '../providers/milestone.provider';
@@ -48,7 +49,8 @@ import { SettingsProvider } from '../providers/settings.provider';
     ProjectProvider,
     CustomerProvider,
     MilestoneProvider,
-    SettingsProvider
+    SettingsProvider,
+    ConnectionProvider
   ]
 })
 export class AppModule { }

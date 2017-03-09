@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
+import { ConnectionProvider } from './connection.provider';
 
 /*
   Projects Object
@@ -18,11 +17,41 @@ export class ProjectProvider {
   public projects = new Array();
 
 
-  constructor(public http: Http) {
+  constructor(public connection: ConnectionProvider) {
 
-    this.loadProjectsFromDatabase();
+    this.loadProjectsFromAPI();
 
-    this.generateExampleData(2);
+    this.testPost();
+
+    //this.generateExampleData(2);
+  }
+
+  // Load projects from api
+  loadProjectsFromAPI() {
+    var h = this;
+
+    this.connection.getReqeuest('/api/v1/project', function (results) {
+      console.log(results);
+      h.projects = results;
+    });
+  }
+
+  testPost() {
+    let testProject = new Object({
+      "name": "Im from the app",
+      "timelimit": 500
+    })
+
+    console.log("exec");
+
+    var h = this;
+    this.connection.postReqeuest('/api/v1/project', testProject, function (results) {
+      console.log("posted")
+      console.log(results);
+      if (results.errorCode == null) {
+        h.loadProjectsFromAPI();
+      }
+    });
   }
 
   // Save the database
