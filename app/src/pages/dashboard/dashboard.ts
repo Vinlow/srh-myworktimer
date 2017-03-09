@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { LocalNotifications } from 'ionic-native';
+
 
 import { ToastController } from 'ionic-angular';
 import { NavController } from 'ionic-angular';
@@ -39,6 +41,12 @@ export class DashboardPage {
     public milestoneProvider: MilestoneProvider,
     public settingsProvider: SettingsProvider
   ) {
+
+    LocalNotifications.schedule({
+      id: 1,
+      text: 'Single ILocalNotification',
+      data: { secret: "test" }
+    });
 
     let settings = this.settingsProvider.settings;
     if (settings['lastSelected']) {
